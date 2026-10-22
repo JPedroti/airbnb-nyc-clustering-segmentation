@@ -1,0 +1,5 @@
+cenário,par,distância,feature dominante,% da distância² na dominante
+A (sem scaling),1 x 2,10.140097227701537,availability_365,97.25585620002111
+A (sem scaling),1 x 3,180.0,availability_365,100.0
+B (com scaling),1 x 2,1.948077741464767,price,47.147082004240644
+B (com scaling),1 x 3,1.367511758650206,availability_365,100.0

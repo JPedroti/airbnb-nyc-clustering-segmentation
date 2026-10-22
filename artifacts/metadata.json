@@ -1,0 +1,151 @@
+{
+  "created_at": "2026-10-22T11:53:41+00:00",
+  "model_path": "artifacts/kmeans_pipeline.joblib",
+  "model_sha256": "340894974a6a269e54aab824213c178d89aa4ef1eb2f3d721a64441d2ec3a0d4",
+  "data": {
+    "path": "data/AB_NYC_2019.csv",
+    "sha256": "e420db40ff10fcb40efc1b5b1648ee0b18a48f4e4537155cecc59fe95d18783a",
+    "n_rows_raw": 48895,
+    "n_rows_removed": 11,
+    "removal_rule": "price < 1",
+    "n_rows_fitted": 48884
+  },
+  "features": {
+    "representation": "R2",
+    "numeric": [
+      "price",
+      "minimum_nights",
+      "availability_365",
+      "reviews_per_month",
+      "calculated_host_listings_count"
+    ],
+    "categorical": [
+      "room_type"
+    ],
+    "input_columns": [
+      "price",
+      "minimum_nights",
+      "availability_365",
+      "reviews_per_month",
+      "calculated_host_listings_count",
+      "room_type"
+    ],
+    "id_column": "id",
+    "transformed_columns": [
+      "num__price",
+      "num__minimum_nights",
+      "num__availability_365",
+      "num__reviews_per_month",
+      "num__calculated_host_listings_count",
+      "cat__room_type_Entire home/apt",
+      "cat__room_type_Private room",
+      "cat__room_type_Shared room"
+    ],
+    "category_orders": {
+      "room_type": [
+        "Entire home/apt",
+        "Private room",
+        "Shared room"
+      ]
+    }
+  },
+  "preprocessing": {
+    "zero_fill": [
+      "reviews_per_month"
+    ],
+    "upper_caps_learned_in_fit": {
+      "minimum_nights": 365.0,
+      "price": 1000.0,
+      "reviews_per_month": 7.97
+    },
+    "winsor_quantile": 0.995,
+    "log1p": [
+      "price",
+      "minimum_nights",
+      "reviews_per_month",
+      "calculated_host_listings_count"
+    ],
+    "scaler": "StandardScaler (só numéricas)",
+    "encoder": "OneHotEncoder(handle_unknown='ignore'); segment.py recusa categorias desconhecidas"
+  },
+  "kmeans": {
+    "n_clusters": 7,
+    "init": "k-means++",
+    "n_init": 10,
+    "max_iter": 300,
+    "random_state": 42,
+    "n_iter": 10
+  },
+  "cluster_sizes": {
+    "0": 7490,
+    "1": 11034,
+    "2": 2325,
+    "3": 12969,
+    "4": 5282,
+    "5": 4123,
+    "6": 5661
+  },
+  "internal_metrics": {
+    "inertia": 97626.09806123664,
+    "silhouette": 0.28401777908828807,
+    "davies_bouldin": 1.1561765180636816,
+    "calinski_harabasz": 14373.43526004171,
+    "silhouette_sample": "5000 linhas, semente 42",
+    "space": "espaço transformado R2 (StandardScaler), não o PCA"
+  },
+  "segments": [
+    {
+      "cluster": 0,
+      "name": "Alta atividade de avaliações",
+      "description": "Maior taxa de avaliações da base (3,16/mês; 43 no total), estadia curta (2 noites), preço intermediário (US$ 85) e disponibilidade declarada moderada (66 dias). Mistura quartos privados (59%) e imóveis inteiros (38%).",
+      "n_listings": 7490
+    },
+    {
+      "cluster": 1,
+      "name": "Quartos privados com disponibilidade quase nula",
+      "description": "Quartos privados (94%) a US$ 65, disponibilidade declarada mediana zero (69% com zero; p75 = 14 dias) e pouca atividade (0,10 avaliação/mês).",
+      "n_listings": 11034
+    },
+    {
+      "cluster": 2,
+      "name": "Estadia longa de operadores com portfólio grande",
+      "description": "Estadia mínima de 30 noites (74% com 30 ou mais), anfitriões com mediana de 65 anúncios, alta disponibilidade declarada (322 dias), quase sem avaliações (0,05/mês), US$ 189 e 82% imóveis inteiros. 83% dos anúncios ficam em Manhattan (distrito fora da definição do grupo).",
+      "n_listings": 2325
+    },
+    {
+      "cluster": 3,
+      "name": "Imóveis inteiros com disponibilidade quase nula",
+      "description": "Imóveis inteiros (95%) a US$ 165, disponibilidade declarada mediana zero (64% com zero; p75 = 13 dias) e pouca atividade (0,15 avaliação/mês).",
+      "n_listings": 12969
+    },
+    {
+      "cluster": 4,
+      "name": "Quartos privados com alta disponibilidade",
+      "description": "Quartos privados (89%) a US$ 70, disponibilidade declarada alta (325 dias; p25 = 269) e atividade intermediária (0,88 avaliação/mês).",
+      "n_listings": 5282
+    },
+    {
+      "cluster": 5,
+      "name": "Estadia longa de anfitriões individuais",
+      "description": "Estadia mínima de 30 noites (67% com 30 ou mais), anfitrião com 1 anúncio, US$ 100, disponibilidade declarada muito variável (mediana 157; p25-p75 = 24-302 dias) e pouca atividade (0,14 avaliação/mês). 60% imóveis inteiros.",
+      "n_listings": 4123
+    },
+    {
+      "cluster": 6,
+      "name": "Imóveis inteiros de preço alto e alta disponibilidade",
+      "description": "Imóveis inteiros (94%) com o maior preço da base (US$ 220; p25-p75 = 160-325), disponibilidade declarada alta (269 dias), estadia curta (2 noites) e atividade acima da mediana (1,59 avaliação/mês).",
+      "n_listings": 5661
+    }
+  ],
+  "inference": "predict = centróide mais próximo no espaço transformado; nenhum ajuste em dados novos.",
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.9.0",
+    "joblib": "1.5.3",
+    "matplotlib": "3.11.1"
+  }
+}

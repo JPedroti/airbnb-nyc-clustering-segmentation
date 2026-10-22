@@ -1,0 +1,17 @@
+column,dtype,n_missing,pct_missing,n_unique
+id,int64,0,0.0,48895
+name,str,16,0.03272318232948154,47905
+host_id,int64,0,0.0,37457
+host_name,str,21,0.04294917680744453,11452
+neighbourhood_group,str,0,0.0,5
+neighbourhood,str,0,0.0,221
+latitude,float64,0,0.0,19048
+longitude,float64,0,0.0,14718
+room_type,str,0,0.0,3
+price,int64,0,0.0,674
+minimum_nights,int64,0,0.0,109
+number_of_reviews,int64,0,0.0,394
+last_review,datetime64[us],10052,20.55833929849678,1764
+reviews_per_month,float64,10052,20.55833929849678,937
+calculated_host_listings_count,int64,0,0.0,47
+availability_365,int64,0,0.0,366

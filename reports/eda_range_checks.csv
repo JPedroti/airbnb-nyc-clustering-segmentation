@@ -1,0 +1,13 @@
+rule,kind,n_rows,pct_rows
+price <= 0,domínio,11,0.02249718785151856
+minimum_nights < 1,domínio,0,0.0
+"availability_365 fora de [0, 365]",domínio,0,0.0
+number_of_reviews < 0,domínio,0,0.0
+reviews_per_month < 0,domínio,0,0.0
+calculated_host_listings_count < 1,domínio,0,0.0
+coordenadas fora do retângulo de NYC,domínio,0,0.0
+reviews_per_month ausente com number_of_reviews > 0,consistência,0,0.0
+reviews_per_month presente com number_of_reviews = 0,consistência,0,0.0
+last_review ausente com number_of_reviews > 0,consistência,0,0.0
+minimum_nights > 365,plausibilidade,14,0.02863278453829635
+price > 1.000,plausibilidade,239,0.4888025360466305

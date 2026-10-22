@@ -1,0 +1,31 @@
+# Dados brutos (instruções de download em data/README.md)
+data/*.csv
+data/*.zip
+
+# Enunciado da mentoria (não versionado)
+Projeto_06_Airbnb_NYC_Clusterizacao_Segmentacao*.pdf
+
+# Credenciais do Kaggle
+kaggle.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Ambientes
+.venv/
+venv/
+env/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Caches
+.pytest_cache/
+.cache/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

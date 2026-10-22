@@ -1,0 +1,9 @@
+,segment,n_listings,pct_listings,price_q1,price_median,price_q3,minimum_nights_median,pct_minimum_nights_30plus,availability_365_q1,availability_365_median,availability_365_q3,pct_availability_zero,number_of_reviews_median,reviews_per_month_median,host_listings_median
+0,Alta atividade de avaliações,7490,15.321986744128957,60.0,85.0,120.0,2.0,0.01335113484646195,20.0,66.0,135.0,10.801068090787718,43.0,3.16,1.0
+1,Quartos privados com disponibilidade quase nula,11034,22.571802634808936,50.0,65.0,89.0,2.0,0.0,0.0,0.0,14.0,68.85988762008338,2.0,0.1,1.0
+2,Estadia longa de operadores com portfólio grande,2325,4.75615743392521,125.0,189.0,250.0,30.0,74.1505376344086,247.0,322.0,343.0,1.9784946236559142,1.0,0.05,65.0
+3,Imóveis inteiros com disponibilidade quase nula,12969,26.53015301530153,122.0,165.0,225.0,3.0,0.015421389467190993,0.0,0.0,13.0,63.6903384994988,3.0,0.15,1.0
+4,Quartos privados com alta disponibilidade,5282,10.805171426233533,52.0,70.0,99.0,2.0,0.0,269.0,325.0,358.0,0.0,12.0,0.875,2.0
+5,Estadia longa de anfitriões individuais,4123,8.434252516160708,65.0,100.0,150.0,30.0,66.57773465922871,24.0,157.0,302.0,19.64588891583798,2.0,0.14,1.0
+6,Imóveis inteiros de preço alto e alta disponibilidade,5661,11.580476229441127,160.0,220.0,325.0,2.0,0.5829358770535241,197.0,269.0,329.0,0.12365306482953542,22.0,1.59,1.0
+Base geral,—,48884,100.0,69.0,106.0,175.0,3.0,9.215694296702399,0.0,45.0,227.0,35.860404222240405,5.0,0.37,1.0

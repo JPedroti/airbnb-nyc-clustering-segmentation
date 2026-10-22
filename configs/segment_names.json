@@ -1,0 +1,48 @@
+{
+  "_comment": "Nomes dados depois da análise de perfis (notebook 02, seção 8). Valores em medianas da base clusterizada (48.884 anúncios). n_listings é a assinatura usada por scripts/train.py para conferir que a numeração dos clusters não mudou.",
+  "model": {"representation": "R2", "scaled": true, "k": 7, "n_rows": 48884},
+  "segments": [
+    {
+      "cluster": 0,
+      "n_listings": 7490,
+      "name": "Alta atividade de avaliações",
+      "description": "Maior taxa de avaliações da base (3,16/mês; 43 no total), estadia curta (2 noites), preço intermediário (US$ 85) e disponibilidade declarada moderada (66 dias). Mistura quartos privados (59%) e imóveis inteiros (38%)."
+    },
+    {
+      "cluster": 1,
+      "n_listings": 11034,
+      "name": "Quartos privados com disponibilidade quase nula",
+      "description": "Quartos privados (94%) a US$ 65, disponibilidade declarada mediana zero (69% com zero; p75 = 14 dias) e pouca atividade (0,10 avaliação/mês)."
+    },
+    {
+      "cluster": 2,
+      "n_listings": 2325,
+      "name": "Estadia longa de operadores com portfólio grande",
+      "description": "Estadia mínima de 30 noites (74% com 30 ou mais), anfitriões com mediana de 65 anúncios, alta disponibilidade declarada (322 dias), quase sem avaliações (0,05/mês), US$ 189 e 82% imóveis inteiros. 83% dos anúncios ficam em Manhattan (distrito fora da definição do grupo)."
+    },
+    {
+      "cluster": 3,
+      "n_listings": 12969,
+      "name": "Imóveis inteiros com disponibilidade quase nula",
+      "description": "Imóveis inteiros (95%) a US$ 165, disponibilidade declarada mediana zero (64% com zero; p75 = 13 dias) e pouca atividade (0,15 avaliação/mês)."
+    },
+    {
+      "cluster": 4,
+      "n_listings": 5282,
+      "name": "Quartos privados com alta disponibilidade",
+      "description": "Quartos privados (89%) a US$ 70, disponibilidade declarada alta (325 dias; p25 = 269) e atividade intermediária (0,88 avaliação/mês)."
+    },
+    {
+      "cluster": 5,
+      "n_listings": 4123,
+      "name": "Estadia longa de anfitriões individuais",
+      "description": "Estadia mínima de 30 noites (67% com 30 ou mais), anfitrião com 1 anúncio, US$ 100, disponibilidade declarada muito variável (mediana 157; p25-p75 = 24-302 dias) e pouca atividade (0,14 avaliação/mês). 60% imóveis inteiros."
+    },
+    {
+      "cluster": 6,
+      "n_listings": 5661,
+      "name": "Imóveis inteiros de preço alto e alta disponibilidade",
+      "description": "Imóveis inteiros (94%) com o maior preço da base (US$ 220; p25-p75 = 160-325), disponibilidade declarada alta (269 dias), estadia curta (2 noites) e atividade acima da mediana (1,59 avaliação/mês)."
+    }
+  ]
+}

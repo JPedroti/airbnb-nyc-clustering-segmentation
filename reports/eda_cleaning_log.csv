@@ -1,0 +1,2 @@
+rule,n_removed,n_before,n_after
+price < 1,11,48895,48884

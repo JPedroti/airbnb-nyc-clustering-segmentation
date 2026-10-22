@@ -1,0 +1,17 @@
+column,dtype,pct_missing,n_unique,família,papel no projeto,cuidado
+id,int64,0.0,48895,identificador,chave do anúncio (unidade de análise); identifica cada linha na saída da segmentação,nunca usar como número
+name,str,0.03272318232948154,47905,texto livre,fora da análise,título do anúncio; não entra na distância
+host_id,int64,0.0,37457,identificador,só para conferir calculated_host_listings_count,nunca usar como número contínuo
+host_name,str,0.04294917680744453,11452,texto livre,fora da análise (não exibido),nome de pessoa; sem valor para o perfil comercial
+neighbourhood_group,str,0.0,5,categórica (distritos),comparação descritiva dos perfis; testada como representação R3,"se entrar como input, a comparação posterior vira tautológica"
+neighbourhood,str,0.0,221,categórica (alta cardinalidade),só descritiva,um OneHot com uma dummy por bairro dominaria a distância
+latitude,float64,0.0,19048,coordenada,só mapas,grau não equivale a quilômetro
+longitude,float64,0.0,14718,coordenada,só mapas,grau não equivale a quilômetro
+room_type,str,0.0,3,categórica (tipo de imóvel),feature (OneHot),comparar os clusters com ela depois é tautológico
+price,int64,0.0,674,numérica: perfil comercial,"feature (winsorização p99,5 + log1p); price = 0 excluído",assimetria forte e valores extremos
+minimum_nights,int64,0.0,109,numérica: condição do anúncio,feature (teto de 365 + log1p),pico em 30 noites e valores implausíveis
+number_of_reviews,int64,0.0,394,numérica: atividade,só descritiva (redundante com reviews_per_month),não mede satisfação nem receita
+last_review,datetime64[us],20.55833929849678,1764,data,só descritiva,não é série temporal; ausente quando não há avaliação
+reviews_per_month,float64,20.55833929849678,937,numérica: atividade,"feature (ausente = 0, winsorização p99,5, log1p)",não mede satisfação nem receita
+calculated_host_listings_count,int64,0.0,47,numérica: portfólio do anfitrião,"feature (log1p, sem teto)",atributo do anfitrião repetido em cada anúncio dele
+availability_365,int64,0.0,366,numérica: disponibilidade declarada,feature (sem transformação),não é taxa de ocupação

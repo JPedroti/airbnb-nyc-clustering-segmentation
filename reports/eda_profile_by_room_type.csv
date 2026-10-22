@@ -1,0 +1,4 @@
+room_type,n_listings,pct_listings,price_q1,price_median,price_q3,minimum_nights_median,pct_minimum_nights_30plus,availability_365_q1,availability_365_median,availability_365_q3,pct_availability_zero,number_of_reviews_median,reviews_per_month_median,host_listings_median
+Entire home/apt,25407,51.97406104246788,120.0,160.0,229.0,3.0,12.417837603809973,0.0,42.0,229.0,34.931318140669894,5.0,0.35,1.0
+Private room,22319,45.65706570657066,50.0,70.0,95.0,2.0,5.57820690891169,0.0,45.0,214.0,37.45239482055648,5.0,0.4,1.0
+Shared room,1158,2.36887325096146,33.0,45.0,75.0,1.0,9.067357512953368,0.0,90.0,341.0,25.561312607944732,4.0,0.41,2.0

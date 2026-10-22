@@ -1,0 +1,16 @@
+column,quantile,base,sample,diff_pct
+price,0.25,69.0,69.0,0.0
+price,0.5,106.0,105.0,-0.9433962264150944
+price,0.75,175.0,175.0,0.0
+minimum_nights,0.25,1.0,1.0,0.0
+minimum_nights,0.5,3.0,3.0,0.0
+minimum_nights,0.75,5.0,5.0,0.0
+availability_365,0.25,0.0,0.0,0.0
+availability_365,0.5,45.0,42.0,-6.666666666666667
+availability_365,0.75,227.0,229.0,0.881057268722467
+reviews_per_month,0.25,0.04,0.04,0.0
+reviews_per_month,0.5,0.37,0.36,-2.7027027027027053
+reviews_per_month,0.75,1.58,1.54,-2.531645569620255
+calculated_host_listings_count,0.25,1.0,1.0,0.0
+calculated_host_listings_count,0.5,1.0,1.0,0.0
+calculated_host_listings_count,0.75,2.0,2.0,0.0
