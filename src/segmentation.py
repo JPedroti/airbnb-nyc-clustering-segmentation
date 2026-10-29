@@ -53,6 +53,9 @@ def row_status(frame: pd.DataFrame, categories: dict[str, list[str]],
     for column in spec["numeric"]:
         if column not in config.ZERO_FILL_COLUMNS:
             flag(frame[column].isna(), f"{column} ausente")
+    if spec.get("distance"):
+        for column in config.COORDINATE_COLUMNS:
+            flag(frame[column].isna(), f"{column} ausente")
     flag(frame["price"] < config.MIN_VALID_PRICE, f"price < {config.MIN_VALID_PRICE}")
     flag(frame["minimum_nights"] < 1, "minimum_nights < 1")
     flag(~frame["availability_365"].between(0, 365) & frame["availability_365"].notna(), "availability_365 fora de [0, 365]")

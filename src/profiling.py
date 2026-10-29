@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 
 from src import config
+from src.geo import distance_to_times_square_km
 
 
 def _q1(series: pd.Series) -> float:
@@ -47,6 +48,21 @@ def profile_table(frame: pd.DataFrame, group: str, order: Sequence | None = None
         "reviews_per_month_median": grouped["reviews_per_month"].median(),
         "host_listings_median": grouped["calculated_host_listings_count"].median(),
     })
+    if order is not None:
+        table = table.reindex([g for g in order if g in table.index])
+    return table
+
+
+def distance_profile(frame: pd.DataFrame, group: str, order: Sequence | None = None) -> pd.DataFrame:
+    """Quartis da distância até a Times Square (km) por grupo: coluna descritiva, fora da definição dos grupos."""
+    distance = distance_to_times_square_km(frame)
+    grouped = distance.groupby(frame[group], observed=True)
+    table = pd.DataFrame({
+        f"{config.DISTANCE_FEATURE}_q1": grouped.agg(_q1),
+        f"{config.DISTANCE_FEATURE}_median": grouped.median(),
+        f"{config.DISTANCE_FEATURE}_q3": grouped.agg(_q3),
+    })
+    table.index.name = group
     if order is not None:
         table = table.reindex([g for g in order if g in table.index])
     return table

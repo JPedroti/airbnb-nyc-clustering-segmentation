@@ -86,6 +86,12 @@ def test_kth_neighbor_distances_are_sorted_and_one_per_point():
     assert len(distances) == len(X) and np.all(np.diff(distances) >= 0)
 
 
+def test_eta_squared_limits():
+    values = np.array([1.0, 1.0, 5.0, 5.0])
+    assert evaluation.eta_squared(values, ["a", "a", "b", "b"]) == 1.0  # grupos explicam tudo
+    assert np.isclose(evaluation.eta_squared(values, ["a", "b", "a", "b"]), 0.0)  # grupos não separam nada
+
+
 def test_distance_decomposition_adds_up_to_squared_distance():
     a, b = np.array([0.0, 1.0, 2.0]), np.array([3.0, 1.0, 0.0])
     table = evaluation.distance_decomposition(a, b, ["x", "y", "z"])

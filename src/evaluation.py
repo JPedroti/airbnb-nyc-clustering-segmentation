@@ -156,6 +156,20 @@ def variance_contribution(X: np.ndarray, feature_names: Sequence[str]) -> pd.Dat
     return table
 
 
+def eta_squared(values, groups) -> float:
+    """Fração da variância de `values` explicada pelos grupos (eta²): 1 - variância dentro / variância total.
+
+    0 = os grupos não separam a variável; 1 = cada grupo tem um único valor.
+    """
+    values = pd.Series(np.asarray(values, dtype=float))
+    groups = pd.Series(np.asarray(groups))
+    total = values.var(ddof=0)
+    if total == 0:
+        return float("nan")
+    within = values.groupby(groups).var(ddof=0).mul(groups.value_counts(normalize=True)).sum()
+    return float(1 - within / total)
+
+
 def distance_decomposition(x_a: np.ndarray, x_b: np.ndarray, feature_names: Sequence[str]) -> pd.DataFrame:
     """Contribuição de cada coluna para a distância Euclidiana quadrática entre dois pontos."""
     squared = (np.asarray(x_a, dtype=float) - np.asarray(x_b, dtype=float)) ** 2

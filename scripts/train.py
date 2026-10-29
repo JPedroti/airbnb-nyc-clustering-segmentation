@@ -13,7 +13,8 @@ Etapas:
    - kmeans_pipeline.joblib: o pipeline completo, usado por scripts/segment.py;
    - metadata.json: SHA-256 do modelo e dos dados, features, parâmetros, limites aprendidos, tamanhos,
      métricas internas, nomes dos segmentos e versões das bibliotecas;
-   - segment_profiles.csv: perfil comercial de cada segmento, com nome e descrição;
+   - segment_profiles.csv: perfil comercial de cada segmento, com nome, descrição e, como coluna só
+     descritiva, a distância mediana até a Times Square;
    - train_assignments.csv: id e cluster de cada anúncio do treino.
 """
 from __future__ import annotations
@@ -65,7 +66,11 @@ def main() -> None:
     metrics["inertia"] = float(pipeline.named_steps["kmeans"].inertia_)
 
     order = list(range(config.FINAL_K))
-    profiles = profiling.profile_table(listings.assign(cluster=labels), "cluster", order)
+    segments = listings.assign(cluster=labels)
+    # A distância até a Times Square é só descritiva: não faz parte da representação R2 (notebook 02, seção 11).
+    distance_median = f"{config.DISTANCE_FEATURE}_median"
+    profiles = profiling.profile_table(segments, "cluster", order).join(
+        profiling.distance_profile(segments, "cluster", order)[[distance_median]])
     profiles.insert(0, "description", [descriptions[c] for c in order])
     profiles.insert(0, "segment_name", [name_map[c] for c in order])
     profiles.index.name = "cluster"
@@ -117,6 +122,10 @@ def main() -> None:
         },
         "segments": [{"cluster": c, "name": name_map[c], "description": descriptions[c], "n_listings": sizes[c]}
                      for c in order],
+        "descriptive_only": {
+            distance_median: "distância mediana (haversine, km) até a Times Square; fora da definição dos grupos",
+            "reference_point": config.TIMES_SQUARE,
+        },
         "inference": "predict = centróide mais próximo no espaço transformado; nenhum ajuste em dados novos.",
         "environment": environment_info(),
     }

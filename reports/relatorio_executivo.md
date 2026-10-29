@@ -17,22 +17,26 @@ preço zero saíram. A unidade de análise é o **anúncio**, e não reservas ou
 
 ## Segmentos encontrados (medianas)
 
-| Segmento | Anúncios | Preço | Estadia mín. | Dias disponíveis | Avaliações/mês | Anúncios do anfitrião |
-|---|---|---|---|---|---|---|
-| Imóveis inteiros com disponibilidade quase nula | 26,5% | US$ 165 | 3 | 0 | 0,15 | 1 |
-| Quartos privados com disponibilidade quase nula | 22,6% | US$ 65 | 2 | 0 | 0,10 | 1 |
-| Alta atividade de avaliações | 15,3% | US$ 85 | 2 | 66 | **3,16** | 1 |
-| Imóveis inteiros de preço alto e alta disponibilidade | 11,6% | **US$ 220** | 2 | 269 | 1,59 | 1 |
-| Quartos privados com alta disponibilidade | 10,8% | US$ 70 | 2 | **325** | 0,88 | 2 |
-| Estadia longa de anfitriões individuais | 8,4% | US$ 100 | **30** | 157 | 0,14 | 1 |
-| Estadia longa de operadores com portfólio grande | 4,8% | US$ 189 | **30** | 322 | 0,05 | **65** |
+| Segmento | Anúncios | Preço | Estadia mín. | Dias disponíveis | Avaliações/mês | Anúncios do anfitrião | Km da Times Square* |
+|---|---|---|---|---|---|---|---|
+| Imóveis inteiros com disponibilidade quase nula | 26,5% | US$ 165 | 3 | 0 | 0,15 | 1 | 5,23 |
+| Quartos privados com disponibilidade quase nula | 22,6% | US$ 65 | 2 | 0 | 0,10 | 1 | 7,67 |
+| Alta atividade de avaliações | 15,3% | US$ 85 | 2 | 66 | **3,16** | 1 | 8,03 |
+| Imóveis inteiros de preço alto e alta disponibilidade | 11,6% | **US$ 220** | 2 | 269 | 1,59 | 1 | 5,66 |
+| Quartos privados com alta disponibilidade | 10,8% | US$ 70 | 2 | **325** | 0,88 | 2 | 8,88 |
+| Estadia longa de anfitriões individuais | 8,4% | US$ 100 | **30** | 157 | 0,14 | 1 | 6,02 |
+| Estadia longa de operadores com portfólio grande | 4,8% | US$ 189 | **30** | 322 | 0,05 | **65** | **2,65** |
+
+\* Distância em linha reta até a Times Square: coluna só descritiva, fora da definição dos grupos.
 
 ![Atributos por segmento](figures/segment_distributions.png)
 
 Os grupos se separam em uma ou duas variáveis cada e se sobrepõem nas demais (Silhouette de 0,28). São **regiões de um contínuo**,
 não grupos isolados, e os nomes resumem tendências. O distrito não entrou na definição. Ainda assim, o segmento de operadores de
 estadia longa tem 83% dos anúncios em Manhattan, contra 44% na base. Os demais ficam próximos da distribuição da cidade. A maior
-diferença é o peso de Queens nos quartos privados de alta disponibilidade: 22%, contra 12% na base.
+diferença é o peso de Queens nos quartos privados de alta disponibilidade: 22%, contra 12% na base. A distância até a Times
+Square confirma a leitura: os operadores de estadia longa são o segmento mais central (mediana de 2,65 km), e os quartos privados
+de alta disponibilidade, o mais periférico (8,88 km).
 
 ![Segmentos no mapa](figures/segment_map.png)
 
@@ -44,6 +48,7 @@ diferença é o peso de Queens nos quartos privados de alta disponibilidade: 22%
 | K-Means, K = 2 | maior Silhouette (0,392) | um grupo com 89% dos anúncios: inútil para segmentar |
 | K-Means sem padronização | Silhouette de 0,73 | só fatia a disponibilidade; índice alto, segmentação vazia |
 | DBSCAN (`eps` 0,9, `min_samples` 16, amostra de 10 mil) | 5,3% de ruído; grupos idênticos ao tipo de imóvel (ARI 0,993) | separação tautológica; sem `predict` para anúncios novos |
+| K-Means com a distância até a Times Square (experimento opcional) | um grupo central novo (83,1% em Manhattan) que divide o segmento de imóveis caros por localização; ARI 0,725 com a solução escolhida | não escolhida: aumenta o peso da geografia (a partição explica 31,7% da variância da distância, contra 9,7%) sem criar um perfil comercial novo |
 
 O DBSCAN foi útil como **diagnóstico**. O ruído dele se concentra nos anúncios atípicos (estadias longas e alta disponibilidade),
 e com raio menor ele revela grupos de anúncios quase idênticos de um mesmo operador.

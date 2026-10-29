@@ -16,18 +16,21 @@ mínima, disponibilidade declarada, avaliações por mês, portfólio do anfitri
 - **DBSCAN:** só reproduziu o tipo de imóvel ou deixou grande parte da amostra como ruído. Ficou como diagnóstico de anúncios
   atípicos.
 
-| # | Segmento | % dos anúncios | Preço | Estadia mín. | Dias disponíveis | Avaliações/mês | Anúncios do anfitrião |
-|---|---|---|---|---|---|---|---|
-| 0 | Alta atividade de avaliações | 15,3 | US$ 85 | 2 | 66 | 3,16 | 1 |
-| 1 | Quartos privados com disponibilidade quase nula | 22,6 | US$ 65 | 2 | 0 | 0,10 | 1 |
-| 2 | Estadia longa de operadores com portfólio grande | 4,8 | US$ 189 | 30 | 322 | 0,05 | 65 |
-| 3 | Imóveis inteiros com disponibilidade quase nula | 26,5 | US$ 165 | 3 | 0 | 0,15 | 1 |
-| 4 | Quartos privados com alta disponibilidade | 10,8 | US$ 70 | 2 | 325 | 0,88 | 2 |
-| 5 | Estadia longa de anfitriões individuais | 8,4 | US$ 100 | 30 | 157 | 0,14 | 1 |
-| 6 | Imóveis inteiros de preço alto e alta disponibilidade | 11,6 | US$ 220 | 2 | 269 | 1,59 | 1 |
+| # | Segmento | % dos anúncios | Preço | Estadia mín. | Dias disponíveis | Avaliações/mês | Anúncios do anfitrião | Distância da Times Square (km)* |
+|---|---|---|---|---|---|---|---|---|
+| 0 | Alta atividade de avaliações | 15,3 | US$ 85 | 2 | 66 | 3,16 | 1 | 8,03 |
+| 1 | Quartos privados com disponibilidade quase nula | 22,6 | US$ 65 | 2 | 0 | 0,10 | 1 | 7,67 |
+| 2 | Estadia longa de operadores com portfólio grande | 4,8 | US$ 189 | 30 | 322 | 0,05 | 65 | 2,65 |
+| 3 | Imóveis inteiros com disponibilidade quase nula | 26,5 | US$ 165 | 3 | 0 | 0,15 | 1 | 5,23 |
+| 4 | Quartos privados com alta disponibilidade | 10,8 | US$ 70 | 2 | 325 | 0,88 | 2 | 8,88 |
+| 5 | Estadia longa de anfitriões individuais | 8,4 | US$ 100 | 30 | 157 | 0,14 | 1 | 6,02 |
+| 6 | Imóveis inteiros de preço alto e alta disponibilidade | 11,6 | US$ 220 | 2 | 269 | 1,59 | 1 | 5,66 |
 
 Medianas nos valores originais. Fonte: [`artifacts/segment_profiles.csv`](artifacts/segment_profiles.csv), gerado por
 `scripts/train.py`. O relatório para o negócio está em [`reports/relatorio_executivo.md`](reports/relatorio_executivo.md).
+
+\* Coluna só **descritiva**: a distância em linha reta até a Times Square não faz parte da definição dos grupos. Ela foi testada
+como feature num experimento opcional (R4, notebook 02, seção 11) e não foi adotada.
 
 ![Atributos por segmento](reports/figures/segment_distributions.png)
 
@@ -48,12 +51,13 @@ Medianas nos valores originais. Fonte: [`artifacts/segment_profiles.csv`](artifa
 | Decisão | Escolha | Evidência |
 |---|---|---|
 | Features (R2) | `price`, `minimum_nights`, `availability_365`, `reviews_per_month`, `calculated_host_listings_count` + `room_type` (OneHot) | inventário de colunas e seção 10 do notebook 01 |
-| Fora das features | IDs e texto; `neighbourhood` (221 categorias); `latitude`/`longitude` (só mapas); `number_of_reviews` (ρ = 0,85 com `reviews_per_month`); `last_review` | notebook 01 |
+| Fora das features | IDs e texto; `neighbourhood` (221 categorias); `latitude`/`longitude` (só mapas e, no experimento opcional R4, convertidas em distância); `number_of_reviews` (ρ = 0,85 com `reviews_per_month`); `last_review` | notebook 01 |
 | Tratamento | `reviews_per_month` ausente = 0; winsorização p99,5 em `price` (US$ 1.000) e `reviews_per_month` (7,97); teto de 365 em `minimum_nights`; `log1p`; `StandardScaler` | notebook 01, seção 9; notebook 02, seção 3 |
 | Normalização | **com** `StandardScaler`: sem ela, `availability_365` é 99,98% da distância, e as partições com e sem escala concordam pouco (ARI 0,15) | notebook 02, seção 3 |
 | K | **7**: melhor Davies-Bouldin (1,156), Silhouette 0,284 (patamar de K = 7–9), Calinski-Harabasz 1% abaixo do máximo, ARI 0,996 entre 5 sementes, menor grupo com 4,8% | notebook 02, seção 5 |
 | DBSCAN | `eps` = 0,9 e `min_samples` = 16 na amostra de 10.000: 5,3% de ruído, clusters iguais a `room_type` (ARI 0,993); com cobertura idêntica, o K-Means tem Silhouette 0,299, contra 0,018 | notebook 02, seção 7 |
 | Segmentação final | K-Means K = 7 em R2 padronizado | notebook 02, seção 9 |
+| Distância até a Times Square (opcional) | **não adotada como feature**; fica como coluna descritiva | R4 (R2 + distância) concorda com R2 em ARI 0,725 e cria um grupo central (83,1% em Manhattan) que refina o segmento 6 por localização, sem perfil comercial novo; a partição passa a explicar 31,7% da variância da distância, contra 9,7% em R2 (notebook 02, seção 11) |
 
 As 14 perguntas finais do enunciado são respondidas no notebook 02, seção 10.
 
@@ -64,11 +68,13 @@ As 14 perguntas finais do enunciado são respondidas no notebook 02, seção 10.
 ├── data/README.md                  como obter o AB_NYC_2019.csv (não versionado)
 ├── notebooks/
 │   ├── 01_eda.ipynb                hipóteses, inventário, EDA, limpeza e decisões de features
-│   └── 02_clustering.ipynb         distâncias, experimento com e sem escala, K-Means, DBSCAN, perfis, PCA, mapa e decisão
+│   └── 02_clustering.ipynb         distâncias, experimento com e sem escala, K-Means, DBSCAN, perfis, PCA, mapa, decisão
+│                                   e experimento opcional R4 (distância até a Times Square)
 ├── src/                            funções compartilhadas por notebooks, scripts e testes
 │   ├── config.py                   caminhos, features, sementes, grades e K final
 │   ├── data.py                     leitura, schema, SHA-256, auditoria e limpeza
-│   ├── preprocessing.py            ColumnTransformer (tratamento, scaler, OneHot) e pipeline K-Means
+│   ├── geo.py                      distância em km (haversine) até a Times Square
+│   ├── preprocessing.py            ColumnTransformer (tratamento, scaler, OneHot, distância na R4) e pipeline K-Means
 │   ├── evaluation.py               métricas com regra de validade, varredura de K, DBSCAN e distâncias
 │   ├── profiling.py                perfis, composição, representatividade e nomes dos segmentos
 │   ├── segmentation.py             validação de entrada e atribuição de segmentos a anúncios novos
@@ -155,7 +161,7 @@ python -m pytest -q
 |---|---|
 | `artifacts/kmeans_pipeline.joblib` | `Pipeline` completo: tratamento, `StandardScaler`, OneHot e `KMeans(K = 7)` |
 | `artifacts/metadata.json` | SHA-256 do modelo e dos dados, features, limites aprendidos, parâmetros, tamanhos, métricas, nomes e versões |
-| `artifacts/segment_profiles.csv` | tabela de rótulos e perfis: nome, descrição, tamanho, quartis de preço e disponibilidade, estadia, avaliações e portfólio |
+| `artifacts/segment_profiles.csv` | tabela de rótulos e perfis: nome, descrição, tamanho, quartis de preço e disponibilidade, estadia, avaliações, portfólio e, como coluna descritiva, a distância mediana até a Times Square |
 | `artifacts/train_assignments.csv` | `id` e `cluster` de cada anúncio do treino |
 | `artifacts/dbscan/` | grades, rótulos de referência, perfil com ruído, ruído por segmento do K-Means e parâmetros |
 | `configs/segment_names.json` | nomes dados depois da análise, com a assinatura de tamanhos conferida pelo `train.py` |
@@ -169,12 +175,14 @@ python -m pytest -q
   - relatório executivo;
   - README, `requirements.txt` e `.gitignore`.
 - **Melhorias opcionais:**
-  - suíte `pytest` (26 testes);
+  - suíte `pytest` (33 testes);
   - DBSCAN só numérico (R1, experimento complementar);
   - representações alternativas R1 e R3 no K-Means;
   - checagem de estabilidade por ARI entre sementes;
   - curva de k-distâncias, que o enunciado recomenda;
-  - medida de "segmentos mais distintos" pela distância do centróide ao centro da base.
+  - medida de "segmentos mais distintos" pela distância do centróide ao centro da base;
+  - experimento R4 com a distância até a Times Square (notebook 02, seção 11) e essa distância como coluna descritiva dos
+    perfis.
 
 ## 7. Checklist do enunciado
 
@@ -205,5 +213,6 @@ python -m pytest -q
 - **Peso dos operadores:** a segmentação é de anúncios, então anfitriões com muitos anúncios pesam mais (o maior tem 327).
 - **Amostras:** o Silhouette (5.000 linhas) e o DBSCAN (10.000 linhas) usam amostras fixas, com semente 42.
 - **Dependência do ambiente:** a numeração dos clusters depende dos dados e das versões das bibliotecas. O `train.py` confere a
-  assinatura de tamanhos antes de gravar os nomes.
+  assinatura de tamanhos antes de gravar os nomes. Retreinar também pode mudar o SHA-256 do arquivo do pipeline sem mudar os
+  rótulos: a ordem das somas paralelas do K-Means gera diferenças da ordem de 10⁻¹⁶ nos centróides.
 - **Atualidade:** os dados são de 2019. Usar os segmentos hoje exigiria reaplicar o pipeline a dados atuais e revisar os perfis.

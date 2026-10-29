@@ -9,6 +9,9 @@ Etapas das numéricas, nesta ordem:
 
 As categóricas recebem `OneHotEncoder` com categorias fixas (ordem de `config.CATEGORY_ORDERS`) e não são
 escalonadas: cada dummy vale 0 ou 1.
+
+Na representação experimental R4, latitude e longitude viram uma única coluna, a distância em km até a
+Times Square (`log1p` e o mesmo scaler das numéricas). As coordenadas brutas nunca entram na distância.
 """
 from __future__ import annotations
 
@@ -18,9 +21,10 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cluster import KMeans
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardScaler
 
 from src import config
+from src.geo import haversine_km
 
 
 class NumericTreatment(BaseEstimator, TransformerMixin):
@@ -74,12 +78,43 @@ class NumericTreatment(BaseEstimator, TransformerMixin):
         return np.asarray(self.feature_names_in_, dtype=object)
 
 
+class DistanceToReference(BaseEstimator, TransformerMixin):
+    """Transforma (latitude, longitude) na distância em km (haversine) até um ponto de referência.
+
+    Não aprende nada no `fit`: a referência é fixa (por padrão, `config.TIMES_SQUARE`).
+    """
+
+    def __init__(self, lat=config.TIMES_SQUARE["lat"], lon=config.TIMES_SQUARE["lon"],
+                 feature_name=config.DISTANCE_FEATURE):
+        self.lat = lat
+        self.lon = lon
+        self.feature_name = feature_name
+
+    def fit(self, X, y=None):
+        self.n_features_in_ = 2
+        return self
+
+    def transform(self, X):
+        X = pd.DataFrame(X)
+        latitude, longitude = (X["latitude"], X["longitude"]) if "latitude" in X.columns else (X.iloc[:, 0], X.iloc[:, 1])
+        return haversine_km(latitude, longitude, self.lat, self.lon).reshape(-1, 1)
+
+    def get_feature_names_out(self, input_features=None):
+        return np.asarray([self.feature_name], dtype=object)
+
+
 def make_preprocessor(representation: str = config.MAIN_REPRESENTATION, scale: bool = True) -> ColumnTransformer:
     """ColumnTransformer da representação pedida; `scale=False` reproduz o cenário A (sem StandardScaler)."""
     spec = config.REPRESENTATIONS[representation]
     numeric_steps = [("treat", NumericTreatment())]
     numeric_steps.append(("scale", StandardScaler() if scale else "passthrough"))
     transformers = [("num", Pipeline(numeric_steps), list(spec["numeric"]))]
+    if spec.get("distance"):
+        distance_steps = [("distance", DistanceToReference())]
+        if config.DISTANCE_LOG1P:
+            distance_steps.append(("log", FunctionTransformer(np.log1p, feature_names_out="one-to-one")))
+        distance_steps.append(("scale", StandardScaler() if scale else "passthrough"))
+        transformers.append(("geo", Pipeline(distance_steps), list(config.COORDINATE_COLUMNS)))
     if spec["categorical"]:
         categories = [config.CATEGORY_ORDERS[column] for column in spec["categorical"]]
         encoder = OneHotEncoder(categories=categories, handle_unknown="ignore", sparse_output=False)
@@ -106,7 +141,8 @@ def make_kmeans_pipeline(
 def input_columns(representation: str = config.MAIN_REPRESENTATION) -> list[str]:
     """Colunas brutas que a representação precisa receber."""
     spec = config.REPRESENTATIONS[representation]
-    return list(spec["numeric"]) + list(spec["categorical"])
+    coordinates = list(config.COORDINATE_COLUMNS) if spec.get("distance") else []
+    return list(spec["numeric"]) + coordinates + list(spec["categorical"])
 
 
 def feature_block(feature_name: str) -> str:

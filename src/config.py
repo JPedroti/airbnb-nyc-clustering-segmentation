@@ -79,8 +79,20 @@ REPRESENTATIONS = {
     "R1": {"numeric": FEATURE_NUMERIC, "categorical": []},
     "R2": {"numeric": FEATURE_NUMERIC, "categorical": ["room_type"]},
     "R3": {"numeric": FEATURE_NUMERIC, "categorical": ["room_type", "neighbourhood_group"]},
+    # Experimento complementar (notebook 02, seção 11): R2 + distância até a Times Square, calculada a
+    # partir de latitude/longitude. Não substitui R2.
+    "R4": {"numeric": FEATURE_NUMERIC, "categorical": ["room_type"], "distance": True},
 }
 MAIN_REPRESENTATION = "R2"
+
+# Distância em linha reta (haversine) até a Times Square, em km. A coordenada é uma referência externa
+# aproximada do centro da praça. log1p: a assimetria bruta é 1,04 e o maior |z| cai de 6,5 para 3,1
+# (anúncios de Staten Island a até 35,9 km), o mesmo critério das demais variáveis não negativas.
+TIMES_SQUARE = {"lat": 40.7580, "lon": -73.9855}
+EARTH_RADIUS_KM = 6371.0
+DISTANCE_FEATURE = "dist_times_square_km"
+DISTANCE_LOG1P = True
+COORDINATE_COLUMNS = ["latitude", "longitude"]
 
 # --------------------------------------------------------------------------------------------------
 # Reprodutibilidade e protocolos de custo computacional (seção 6 e 7.2 do enunciado)

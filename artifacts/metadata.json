@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-22T11:53:41+00:00",
+  "created_at": "2026-10-29T10:50:38+00:00",
   "model_path": "artifacts/kmeans_pipeline.joblib",
-  "model_sha256": "340894974a6a269e54aab824213c178d89aa4ef1eb2f3d721a64441d2ec3a0d4",
+  "model_sha256": "404a4ddbfea1665a79786c041fb07b559394f734352375172070de541e577d74",
   "data": {
     "path": "data/AB_NYC_2019.csv",
     "sha256": "e420db40ff10fcb40efc1b5b1648ee0b18a48f4e4537155cecc59fe95d18783a",
@@ -137,10 +137,17 @@
       "n_listings": 5661
     }
   ],
+  "descriptive_only": {
+    "dist_times_square_km_median": "distância mediana (haversine, km) até a Times Square; fora da definição dos grupos",
+    "reference_point": {
+      "lat": 40.758,
+      "lon": -73.9855
+    }
+  },
   "inference": "predict = centróide mais próximo no espaço transformado; nenhum ajuste em dados novos.",
   "environment": {
     "python": "3.11.9",
-    "platform": "Windows-10-10.0.26200-SP0",
+    "platform": "Windows-10-10.0.26300-SP0",
     "numpy": "2.4.6",
     "pandas": "3.0.5",
     "scipy": "1.17.1",
